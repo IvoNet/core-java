@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package nl.ivonet.core_java.design_patterns.behavioral.interpreter;
+package nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression;
 
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Number;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -25,7 +24,7 @@ public class NumberTest {
 
     @Test(expected = NumberFormatException.class)
     public void testCreate() throws Exception {
-        nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Number number = new Number("wrong");
+        new Number("wrong");
     }
 
     @Test

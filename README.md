@@ -1,9 +1,12 @@
 # Core Java
 
-In this module I'll show some core java principles and will try to explain them as I go.
+In this module I'll show some core java principles.
 
-Some of the things I will put in here are:
+## Design patterns
+* Interpreter: `Calculator`
+* Strategy: `Duck`
 
-* design patterns
 
+# Calculator
 
+The Calculator example can 
