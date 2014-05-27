@@ -38,8 +38,8 @@ public class Client {
     private final Stack<Operator> operators;
 
     public Client() {
-        values = new Stack<>();
-        operators = new Stack<>();
+        this.values = new Stack<>();
+        this.operators = new Stack<>();
     }
 
     public BigDecimal evaluate(final String formula) {
@@ -53,57 +53,57 @@ public class Client {
         while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken();
 
-            if ( processTokenAsVariable(token) || processTokenAsNumber(token)) {
+            if (processTokenAsVariable(token) || processTokenAsNumber(token)) {
                 processTokens(context);
             } else if (!processTokenAsOperator(token)) {
                 throw new IllegalStateException("A number, operator or variable should have been found");
             }
         }
-        final Expression result = values.pop();
+        final Expression result = this.values.pop();
         postProsessingErrorChecks();
         return result.interpret(context);
     }
 
     private void postProsessingErrorChecks() {
-        if (!values.isEmpty()) {
+        if (!this.values.isEmpty()) {
             throw new IllegalStateException("Some part of the formula is incorrect");
         }
 
-        if (!operators.isEmpty()) {
+        if (!this.operators.isEmpty()) {
             throw new IllegalStateException("I have some left over operators");
         }
     }
 
     private void processTokens(final Context context) {
-        if (!operators.isEmpty()) {
-            Operator operator = operators.pop();
+        if (!this.operators.isEmpty()) {
+            Operator operator = this.operators.pop();
             operator = processSignedNumber(context, operator);
 
             if (Operator.isPlus(operator)) {
-                values.push(new Plus(values.pop(), values.pop()));
+                this.values.push(new Plus(this.values.pop(), this.values.pop()));
             } else if (Operator.isMinus(operator)) {
-                values.push(new Minus(values.pop(), values.pop()));
+                this.values.push(new Minus(this.values.pop(), this.values.pop()));
             } else if (Operator.isMultiply(operator)) {
-                values.push(new Multiply(values.pop(), values.pop()));
+                this.values.push(new Multiply(this.values.pop(), this.values.pop()));
             } else if (Operator.isDevide(operator)) {
-                values.push(new Devide(values.pop(), values.pop()));
+                this.values.push(new Devide(this.values.pop(), this.values.pop()));
             }
         }
     }
 
-    private Operator processSignedNumber(final Context context, Operator operator) {
-        if (!operators.isEmpty()) {
-            values.push(new Number(String.format("%s%s", operator.toString(), values.pop()
-                                                                                    .interpret(context)
-                                                                                    .toPlainString())));
-            operator = operators.pop();
+    private Operator processSignedNumber(final Context context, final Operator operator) {
+        if (!this.operators.isEmpty()) {
+            this.values.push(new Number(String.format("%s%s", operator.toString(), this.values.pop()
+                                                                                              .interpret(context)
+                                                                                              .toPlainString())));
+            return this.operators.pop();
         }
         return operator;
     }
 
     private boolean processTokenAsVariable(final String token) {
         if (Variable.isVariable(token)) {
-            values.push(new Variable(token));
+            this.values.push(new Variable(token));
             return true;
         }
         return false;
@@ -112,7 +112,7 @@ public class Client {
 
     private boolean processTokenAsOperator(final String token) {
         try {
-            operators.push(Operator.fromString(token));
+            this.operators.push(Operator.fromString(token));
         } catch (final IllegalArgumentException e) {
             return false;
         }
