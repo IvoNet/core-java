@@ -25,7 +25,7 @@ import java.math.BigDecimal;
  * Plus       := Expression + Expression
  * Minus      := Expression - Expression
  * Multiply   := Expression * Expression
- * Devide     := Expression : Expression
+ * Divide     := Expression : Expression
  * Number     := BigDecimal
  * Variable   := [a-z]
  */

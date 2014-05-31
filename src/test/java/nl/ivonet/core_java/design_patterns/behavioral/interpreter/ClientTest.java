@@ -24,6 +24,9 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Unit tests for the {@link Client} class.
+ */
 public class ClientTest {
 
 
@@ -44,7 +47,7 @@ public class ClientTest {
     @Test
     public void testSubtract() throws Exception {
         assertEquals(new BigDecimal("10"), client.evaluate("15-5"));
-        assertEquals(new BigDecimal("10"), client.evaluate("15 - 5"));
+        assertEquals(new BigDecimal("10"), client.evaluate("15 -    5"));
         assertEquals(new BigDecimal("10"), client.evaluate("15 - 5   "));
     }
 
@@ -63,9 +66,9 @@ public class ClientTest {
 
     @Test
     public void testCompountExpresson() throws Exception {
-        assertEquals(new BigDecimal("42"), client.evaluate("6*7+10-42:10*42") );
-        assertEquals(new BigDecimal("42"), client.evaluate("6* 7+ 10 -42 :10*42") );
-        assertEquals(new BigDecimal("42"), client.evaluate(" 6* 7+ 10 -42:10 * 42  ") );
+        assertEquals(new BigDecimal("42"), client.evaluate("6*7+10-42:10*42"));
+        assertEquals(new BigDecimal("42"), client.evaluate("6* 7+ 10 -42 :10*42"));
+        assertEquals(new BigDecimal("42"), client.evaluate(" 6* 7+ 10 -42:10 * 42  "));
 
     }
 
@@ -78,5 +81,27 @@ public class ClientTest {
         assertEquals(new BigDecimal("101.3333"), client.evaluate("a*a+b", context));
     }
 
+    @Test
+    public void testNegativeStartingNumber() throws Exception {
+        assertEquals(new BigDecimal("-42"), client.evaluate("-42"));
+        assertEquals(BigDecimal.ZERO, client.evaluate("-0"));
+    }
 
+    @Test
+    public void testPositiveStartingNumber() throws Exception {
+        assertEquals(new BigDecimal("+42"), client.evaluate("+42"));
+        assertEquals(BigDecimal.ZERO, client.evaluate("+0"));
+    }
+
+    @Test
+    public void testVariableWithNoContextReference() throws Exception {
+        assertEquals(BigDecimal.ZERO, client.evaluate(
+                "noReferenceAvailableShouldReturnNullBecauseItIsDesignedThatWay"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testWrongVariable() throws Exception {
+        client.evaluate("AWrongVariableBecauseItStartsWithACapitalCasedLetter");
+
+    }
 }

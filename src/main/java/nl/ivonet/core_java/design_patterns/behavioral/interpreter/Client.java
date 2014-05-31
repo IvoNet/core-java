@@ -47,6 +47,7 @@ public class Client {
     }
 
     public BigDecimal evaluate(final String formula, final Context context) {
+        leadingZeroForNegativeNumberProcessing();
 
         final Tokenizer tokenizer = new Tokenizer(formula.trim());
 
@@ -64,35 +65,67 @@ public class Client {
         return result.interpret(context);
     }
 
+    private void leadingZeroForNegativeNumberProcessing() {
+        this.values.push(Number.ZERO);
+    }
+
+
+    private void processTokens(final Context context) {
+        if (noOperators()) {
+            return;
+        }
+        final Operator operator = processSignedNumber(context);
+
+        if (Operator.isPlus(operator)) {
+            this.values.push(new Plus(this.values.pop(), this.values.pop()));
+            return;
+        }
+        if (Operator.isMinus(operator)) {
+            this.values.push(new Minus(this.values.pop(), this.values.pop()));
+            return;
+        }
+        if (Operator.isMultiply(operator)) {
+            this.values.push(new Multiply(this.values.pop(), this.values.pop()));
+            return;
+        }
+        this.values.push(new Devide(this.values.pop(), this.values.pop()));
+    }
+
     private void postProsessingErrorChecks() {
-        if (!this.values.isEmpty()) {
+        if (unexpectedValues()) {
             throw new IllegalStateException("Some part of the formula is incorrect");
         }
 
-        if (!this.operators.isEmpty()) {
+        if (hasOperators()) {
             throw new IllegalStateException("I have some left over operators");
         }
     }
 
-    private void processTokens(final Context context) {
-        if (!this.operators.isEmpty()) {
-            Operator operator = this.operators.pop();
-            operator = processSignedNumber(context, operator);
-
-            if (Operator.isPlus(operator)) {
-                this.values.push(new Plus(this.values.pop(), this.values.pop()));
-            } else if (Operator.isMinus(operator)) {
-                this.values.push(new Minus(this.values.pop(), this.values.pop()));
-            } else if (Operator.isMultiply(operator)) {
-                this.values.push(new Multiply(this.values.pop(), this.values.pop()));
-            } else if (Operator.isDevide(operator)) {
-                this.values.push(new Devide(this.values.pop(), this.values.pop()));
-            }
-        }
+    private boolean hasOperators() {
+        return !noOperators();
     }
 
-    private Operator processSignedNumber(final Context context, final Operator operator) {
-        if (!this.operators.isEmpty()) {
+    private boolean unexpectedValues() {
+        return valuesLeftOver() && notStartingZero();
+    }
+
+    private boolean valuesLeftOver() {
+        return !this.values.isEmpty();
+    }
+
+    private boolean notStartingZero() {
+        return !this.values.pop()
+                           .equals(Number.ZERO);
+    }
+
+    private boolean noOperators() {
+        return this.operators.isEmpty();
+    }
+
+
+    private Operator processSignedNumber(final Context context) {
+        final Operator operator = this.operators.pop();
+        if (hasOperators()) {
             this.values.push(new Number(String.format("%s%s", operator.toString(), this.values.pop()
                                                                                               .interpret(context)
                                                                                               .toPlainString())));
