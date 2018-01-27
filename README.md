@@ -18,3 +18,7 @@ Note that The unit tests are used to demonstrate the workings of the the used pa
 
 This `Strategy` pattern I demonstrated for a Dutch audience so sorry but it's in dutch.
 I think most of you will understand though.
+
+# ToDo
+
+Lots :-)
