@@ -22,9 +22,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

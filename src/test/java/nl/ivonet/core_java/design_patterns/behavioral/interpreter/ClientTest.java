@@ -35,73 +35,73 @@ public class ClientTest {
 
     @Before
     public void setUp() throws Exception {
-        context = new Context();
-        client = new Client();
+        this.context = new Context();
+        this.client = new Client();
     }
 
     @Test
     public void testPlus() throws Exception {
-        assertEquals(new BigDecimal("10"), client.evaluate("5+5"));
+        assertEquals(new BigDecimal("10"), this.client.evaluate("5+5"));
     }
 
     @Test
     public void testSubtract() throws Exception {
-        assertEquals(new BigDecimal("10"), client.evaluate("15-5"));
-        assertEquals(new BigDecimal("10"), client.evaluate("15 -    5"));
-        assertEquals(new BigDecimal("10"), client.evaluate("15 - 5   "));
+        assertEquals(new BigDecimal("10"), this.client.evaluate("15-5"));
+        assertEquals(new BigDecimal("10"), this.client.evaluate("15 -    5"));
+        assertEquals(new BigDecimal("10"), this.client.evaluate("15 - 5   "));
     }
 
     @Test
     public void testMultiply() throws Exception {
-        assertEquals(new BigDecimal("42"), client.evaluate("7*6"));
-        assertEquals(new BigDecimal("42"), client.evaluate("7 * 6"));
-        assertEquals(new BigDecimal("42"), client.evaluate("7* 6 "));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("7*6"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("7 * 6"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("7* 6 "));
     }
 
     @Test
     public void testDevide() throws Exception {
-        assertEquals(new BigDecimal("42"), client.evaluate("420:10"));
-        assertEquals(new BigDecimal("42"), client.evaluate("420 :10"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("420:10"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("420 :10"));
     }
 
     @Test
     public void testCompountExpresson() throws Exception {
-        assertEquals(new BigDecimal("42"), client.evaluate("6*7+10-42:10*42"));
-        assertEquals(new BigDecimal("42"), client.evaluate("6* 7+ 10 -42 :10*42"));
-        assertEquals(new BigDecimal("42"), client.evaluate(" 6* 7+ 10 -42:10 * 42  "));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("6*7+10-42:10*42"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate("6* 7+ 10 -42 :10*42"));
+        assertEquals(new BigDecimal("42"), this.client.evaluate(" 6* 7+ 10 -42:10 * 42  "));
 
     }
 
     @Test
     public void testEvaluateVariable() throws Exception {
 
-        context.store("a", new nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Number("10"));
-        context.store("b", new Number("1.3333"));
+        this.context.store("a", new nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Number("10"));
+        this.context.store("b", new Number("1.3333"));
 
-        assertEquals(new BigDecimal("101.3333"), client.evaluate("a*a+b", context));
+        assertEquals(new BigDecimal("101.3333"), this.client.evaluate("a*a+b", this.context));
     }
 
     @Test
     public void testNegativeStartingNumber() throws Exception {
-        assertEquals(new BigDecimal("-42"), client.evaluate("-42"));
-        assertEquals(BigDecimal.ZERO, client.evaluate("-0"));
+        assertEquals(new BigDecimal("-42"), this.client.evaluate("-42"));
+        assertEquals(BigDecimal.ZERO, this.client.evaluate("-0"));
     }
 
     @Test
     public void testPositiveStartingNumber() throws Exception {
-        assertEquals(new BigDecimal("+42"), client.evaluate("+42"));
-        assertEquals(BigDecimal.ZERO, client.evaluate("+0"));
+        assertEquals(new BigDecimal("+42"), this.client.evaluate("+42"));
+        assertEquals(BigDecimal.ZERO, this.client.evaluate("+0"));
     }
 
     @Test
     public void testVariableWithNoContextReference() throws Exception {
-        assertEquals(BigDecimal.ZERO, client.evaluate(
-                "noReferenceAvailableShouldReturnNullBecauseItIsDesignedThatWay"));
+        assertEquals(BigDecimal.ZERO, this.client.evaluate(
+              "noReferenceAvailableShouldReturnNullBecauseItIsDesignedThatWay"));
     }
 
     @Test(expected = IllegalStateException.class)
     public void testWrongVariable() throws Exception {
-        client.evaluate("AWrongVariableBecauseItStartsWithACapitalCasedLetter");
+        this.client.evaluate("AWrongVariableBecauseItStartsWithACapitalCasedLetter");
 
     }
 }

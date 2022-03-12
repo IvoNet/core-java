@@ -16,20 +16,16 @@
 
 package nl.ivonet.core_java.design_patterns.behavioral.interpreter;
 
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Devide;
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Expression;
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Minus;
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Multiply;
 import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Number;
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Plus;
-import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.Variable;
+import nl.ivonet.core_java.design_patterns.behavioral.interpreter.expression.*;
 import nl.ivonet.core_java.helper.Tokenizer;
 
 import java.math.BigDecimal;
 import java.util.Stack;
 
 /**
- * The Calculator client
+ * The Calculator client.
+ *
  * @author Ivo Woltring
  */
 public class Client {
@@ -53,7 +49,6 @@ public class Client {
 
         while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken();
-
             if (processTokenAsVariable(token) || processTokenAsNumber(token)) {
                 processTokens(context);
             } else if (!processTokenAsOperator(token)) {
